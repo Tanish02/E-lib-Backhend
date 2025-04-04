@@ -6,7 +6,7 @@ const app = express();
 // HTTP methods: GET, POST, PUT, PATCH, DELETE 
 
 app.get('/', (req, res, next) => {
-    res.json({ message: "Welcome to E-Lib APIS" });
+    res.json({ message: "Welcome to E-Lib API" });
 
     
 });
