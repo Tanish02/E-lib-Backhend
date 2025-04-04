@@ -1,15 +1,30 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+import globalErrorHandler from './middlewares/globalErrorHandler';
+
 
 const app = express();
 
-// Routes-
-// HTTP methods: GET, POST, PUT, PATCH, DELETE 
+// Routes===
+ 
 
 app.get('/', (req, res, next) => {
+
+    // throw new Error("This is a test error");
+    // const error = createHttpError(404, "This is a test error");
+    // throw error;
+
     res.json({ message: "Welcome to E-Lib API" });
 
     
 });
+
+//global error handler
+
+
+app.use(globalErrorHandler);
+
+
+
 
 
 export default app;
