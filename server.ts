@@ -1,23 +1,15 @@
-import { config } from 'dotenv';
-import app from './src/app'
-import ConnectDB from './src/Config/db';
+import app from './src/app';
+import connectToDatabase from './src/Config/db';
 
+const PORT = process.env.PORT || 5513;
 
-config();
-
-const startServer = async () => {
-
-
-    // Connect to the database
-    await ConnectDB()
-
-    const PORT = process.env.PORT || 3000;
-
-
+connectToDatabase()
+  .then(() => {
     app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
     });
-};
-
-startServer();
-
+  })
+  .catch((error: Error) => {
+    console.error('Database connection failed', error);
+    process.exit(1);
+  });
