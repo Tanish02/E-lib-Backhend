@@ -4,6 +4,7 @@ import userModel from "./userModel";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { config } from "../Config/config";
+import { User } from "./userTypes";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -15,7 +16,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       return next(error);
     }
 
-    // Check if user already exists
+    // Check for existing user
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       const error = createHttpError(400, "User already exists with this email");
@@ -23,33 +24,47 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword: string;
+    try {
+      hashedPassword = await bcrypt.hash(password, 10);
+    } catch (err) {
+      return next(createHttpError(500, "Error while hashing password"));
+    }
 
-    // Create a new user
-    const newUser = await userModel.create({
-      name,
-      email,
-      password: hashedPassword,
-    });
+    // Create new user
+    let newUser: User;
+    try {
+      newUser = await userModel.create({
+        name,
+        email,
+        password: hashedPassword,
+      });
+    } catch (err) {
+      return next(createHttpError(500, 'Error while creating user: ${err instanceof Error ? err.message : String(err)}'));
+    }
 
-    // Generate a JWT token
-
-
-    const token = sign({ sub: newUser._id }, config.jwtSecret as string, {
+    // Generate JWT token
+    let token: string;
+    try {
+      token = sign({ sub: newUser._id }, config.jwtSecret as string, {
         expiresIn: "7d",
         algorithm: "HS256",
-    });
-
-
+      });
+    } catch (err) {
+      return next(createHttpError(500, "Error while generating JWT token"));
+    }
 
     // Send response
-    res.json({ id: newUser._id, token });
+    res.status(201).json({
+      id: newUser._id,
+      token,
+      name: newUser.name,
+      email: newUser.email
+    });
   } catch (error) {
     next(error);
   }
 };
 
-
 // end code 
-
 export { createUser };
