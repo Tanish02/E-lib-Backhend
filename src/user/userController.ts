@@ -3,7 +3,7 @@ import createHttpError from "http-errors";
 import userModel from "./userModel";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
-import { config } from "../Config/config";
+import { config } from "../Config/config"; 
 import { User } from "./userTypes";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -16,22 +16,27 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       return next(error);
     }
 
-    // Check for existing user
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
-      const error = createHttpError(400, "User already exists with this email");
-      return next(error);
-    }
-
-    // Hash the password
-    let hashedPassword: string;
+    // Database call.
     try {
-      hashedPassword = await bcrypt.hash(password, 10);
+      const existingUser = await userModel.findOne({ email });
+
+      if (existingUser) {
+        const error = createHttpError(400,
+           "User already exists with this email.");
+        return next(error);
+      }
     } catch (err) {
-      return next(createHttpError(500, "Error while hashing password"));
+      return next(createHttpError(500,
+         "Error while getting user"));
     }
 
-    // Create new user
+
+
+    /// password -> hash
+
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     let newUser: User;
     try {
       newUser = await userModel.create({
@@ -40,31 +45,34 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         password: hashedPassword,
       });
     } catch (err) {
-      return next(createHttpError(500, 'Error while creating user: ${err instanceof Error ? err.message : String(err)}'));
+      return next(createHttpError(500,
+         "Error while creating user."));
     }
 
-    // Generate JWT token
-    let token: string;
     try {
-      token = sign({ sub: newUser._id }, config.jwtSecret as string, {
+      // Token generation JWT
+      const token = sign({ sub: newUser._id }, config.jwtSecret as string, {
         expiresIn: "7d",
         algorithm: "HS256",
       });
-    } catch (err) {
-      return next(createHttpError(500, "Error while generating JWT token"));
-    }
 
-    // Send response
-    res.status(201).json({
-      id: newUser._id,
-      token,
-      name: newUser.name,
-      email: newUser.email
-    });
+      // Response
+
+      res.status(201).json({ accessToken: token });
+    } catch (err) {
+      return next(createHttpError(500, 
+        "Error while signing jwt token"));
+    }
   } catch (error) {
     next(error);
   }
 };
+     
+
+
+
+   
 
 // end code 
+
 export { createUser };
