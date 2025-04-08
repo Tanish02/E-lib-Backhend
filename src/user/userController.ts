@@ -97,6 +97,6 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-// end code
+// end code.
 
 export { createUser, loginUser };
