@@ -3,6 +3,7 @@ import { createBook, updateBook } from "./bookControler";
 import multer from "multer";
 import path from "node:path";
 import authenticate from "../middlewares/authenticate";
+import { listBooks } from "./bookControler";
 
 const bookRouter = express.Router();
 
@@ -35,6 +36,8 @@ bookRouter.patch(
   ]),
   updateBook
 );
+
+bookRouter.get("/", listBooks);
 
 // end code
 
