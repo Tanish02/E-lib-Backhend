@@ -5,6 +5,7 @@ import fs from "node:fs";
 import createHttpError from "http-errors";
 import bookModel from "./bookModel";
 import { AuthRequest } from "../middlewares/authenticate";
+import mongoose from "mongoose";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
   const { title, genre } = req.body;
@@ -117,7 +118,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
       await fs.promises.unlink(filePath);
     }
 
-    // check file exist
+    // check file present
 
     let completeFileName = "";
     if (files?.file?.[0]) {
@@ -133,7 +134,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
       const uploadResultPdf = await cloudinary.uploader.upload(bookFilePath, {
         resource_type: "raw",
         filename_override: completeFileName,
-        folder: "books-pdfs", // fixed folder name
+        folder: "books-pdfs",
         format: "pdf",
       });
       completeFileName = uploadResultPdf.secure_url;
@@ -170,6 +171,29 @@ const listBooks = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getSingleBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const bookId = req.params.bookId;
+
+  if (!mongoose.Types.ObjectId.isValid(bookId)) {
+    return next(createHttpError(400, "Invalid book ID in database"));
+  }
+
+  try {
+    const book = await bookModel.findById(bookId);
+    if (!book) {
+      return next(createHttpError(404, "Book not found in the database"));
+    }
+
+    res.json(book);
+  } catch (err) {
+    return next(createHttpError(500, "Error getting book details "));
+  }
+};
+
 // end code
 
-export { createBook, updateBook, listBooks };
+export { createBook, updateBook, listBooks, getSingleBook };
