@@ -4,6 +4,7 @@ import {
   updateBook,
   listBooks,
   getSingleBook,
+  deleteBook,
 } from "./bookControler";
 import multer from "multer";
 import path from "node:path";
@@ -44,6 +45,7 @@ bookRouter.patch(
 
 bookRouter.get("/", listBooks);
 bookRouter.get("/:bookId", getSingleBook);
+bookRouter.delete("/:bookId", authenticate, deleteBook);
 
 // end code
 

@@ -108,6 +108,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
         filename
       );
       completeCoverImage = filename;
+
       const uploadResult = await cloudinary.uploader.upload(filePath, {
         filename_override: completeCoverImage,
         folder: "books-covers",
@@ -194,6 +195,41 @@ const getSingleBook = async (
   }
 };
 
+const deleteBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const bookId = req.params.bookId;
+
+  const book = await bookModel.findOne({ _id: bookId });
+  if (!book) {
+    return next(createHttpError(404, "Book not found"));
+  }
+
+  // check access
+  const _req = req as AuthRequest;
+  if (book.author.toString() !== _req.userId) {
+    return next(createHttpError(403, "Not allowed to update this book"));
+  }
+
+  const coverFileSplits = book.coverImage.split("/");
+  const coverImagePublicId =
+    coverFileSplits.at(-2) + "/" + coverFileSplits.at(-1)?.split(".")?.at(-2);
+  console.log("coverFileSplits ", coverFileSplits);
+  console.log("coverImagePublicId ", coverImagePublicId);
+
+  const bookFileSplits = book.file.split("/");
+  const bookFilePublicId = bookFileSplits.at(-2) + "/" + bookFileSplits.at(-1);
+  console.log("bookFilePublicId ", bookFilePublicId);
+  await cloudinary.uploader.destroy(coverImagePublicId);
+  await cloudinary.uploader.destroy(bookFilePublicId, { resource_type: "raw" });
+  await bookModel.deleteOne({ _id: bookId });
+  // console.log("Book deleted successfully");
+  res.json({ message: "Book deleted successfully" });
+  res.sendStatus(204);
+};
+
 // end code
 
-export { createBook, updateBook, listBooks, getSingleBook };
+export { createBook, updateBook, listBooks, getSingleBook, deleteBook };
