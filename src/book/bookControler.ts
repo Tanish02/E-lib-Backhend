@@ -8,7 +8,7 @@ import { AuthRequest } from "../middlewares/authenticate";
 import mongoose from "mongoose";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, genre } = req.body;
+  const { title, genre, description } = req.body;
 
   const files = req.files as { [filename: string]: Express.Multer.File[] };
 
@@ -59,6 +59,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     const newBook = await bookModel.create({
       title,
       genre,
+      description,
       author: _req.userId,
       coverImage: uploadResult.secure_url,
       file: bookFileUploadResult.secure_url,
@@ -80,7 +81,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
 const updateBook = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { title, genre } = req.body;
+    const { title, genre, description } = req.body;
     const bookId = req.params.bookId;
     const book = await bookModel.findOne({ _id: bookId });
 
@@ -145,8 +146,9 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
     const updatedBook = await bookModel.findOneAndUpdate(
       { _id: bookId },
       {
-        title,
-        genre,
+        title: title,
+        description: description,
+        genre: genre,
         coverImage: completeCoverImage ? completeCoverImage : book.coverImage,
         file: completeFileName ? completeFileName : book.file,
       },
