@@ -13,6 +13,26 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
   const files = req.files as { [filename: string]: Express.Multer.File[] };
 
   try {
+    // Debug logging
+    console.log("Request body:", req.body);
+    console.log("Extracted fields:", { title, genre, description, author });
+
+    // Validate required fields
+    if (!title || !genre || !description || !author) {
+      const missingFields = [];
+      if (!title) missingFields.push("title");
+      if (!genre) missingFields.push("genre");
+      if (!description) missingFields.push("description");
+      if (!author) missingFields.push("author");
+
+      return next(
+        createHttpError(
+          400,
+          `Missing required fields: ${missingFields.join(", ")}`
+        )
+      );
+    }
+
     if (!files?.coverImage?.[0] || !files?.file?.[0]) {
       return next(createHttpError(400, "Cover image or book file missing"));
     }
@@ -74,8 +94,22 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     res
       .status(201)
       .json({ id: newBook._id, message: "Book uploaded successfully" });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    console.log("Error in createBook:", err);
+
+    // Check if it's a validation error
+    if (err.name === "ValidationError") {
+      const validationErrors = Object.keys(err.errors).map((key) => {
+        return `${key}: ${err.errors[key].message}`;
+      });
+      return next(
+        createHttpError(
+          400,
+          `Validation failed: ${validationErrors.join(", ")}`
+        )
+      );
+    }
+
     return next(createHttpError(500, "Error uploading book"));
   }
 };
@@ -93,7 +127,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
     // access checking
 
     const _req = req as AuthRequest;
-    if (book.author.toString() !== _req.userId) {
+    if (book.uploader.toString() !== _req.userId) {
       return next(createHttpError(403, "Not allowed to update this book"));
     }
 
@@ -212,8 +246,8 @@ const deleteBook = async (
 
   // check access
   const _req = req as AuthRequest;
-  if (book.author.toString() !== _req.userId) {
-    return next(createHttpError(403, "Not allowed to update this book"));
+  if (book.uploader.toString() !== _req.userId) {
+    return next(createHttpError(403, "Not allowed to delete this book"));
   }
 
   const coverFileSplits = book.coverImage.split("/");
