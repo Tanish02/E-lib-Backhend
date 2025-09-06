@@ -4,7 +4,6 @@ const fetch = require("node-fetch");
 
 async function testBookUpload() {
   try {
-    // First, let's test with a simple form data to see what happens
     const form = new FormData();
 
     // Add text fields
@@ -13,7 +12,7 @@ async function testBookUpload() {
     form.append("genre", "Fiction");
     form.append("description", "This is a test book description");
 
-    // For testing, we'll create dummy files
+    // For testing, dummy files
     form.append("coverImage", Buffer.from("fake image data"), {
       filename: "test-cover.jpg",
       contentType: "image/jpeg",
@@ -36,7 +35,8 @@ async function testBookUpload() {
       method: "POST",
       body: form,
       headers: {
-        // Add a dummy auth token for testing - you'll need to replace this with a real token
+        // dummy auth token for testing
+        //replace with a real token
         Authorization: "Bearer your-test-token-here",
       },
     });
