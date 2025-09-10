@@ -6,6 +6,8 @@ const bookSchema = new mongoose.Schema<Book>(
     title: {
       type: String,
       required: true,
+      unique: true,
+      index: true
     },
     description: {
       type: String,
@@ -24,6 +26,7 @@ const bookSchema = new mongoose.Schema<Book>(
     coverImage: {
       type: String,
       required: true,
+      unique: true,
     },
     file: {
       type: String,
