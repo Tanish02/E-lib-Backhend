@@ -264,7 +264,7 @@ const deleteBook = async (
   await bookModel.deleteOne({ _id: bookId });
   // console.log("Book deleted successfully");
   res.json({ message: "Book deleted successfully" });
-  res.sendStatus(204);
+  // res.sendStatus(204);
 };
 
 // end code
