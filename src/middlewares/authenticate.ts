@@ -23,7 +23,6 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
     return next(createHttpError(401, "Invalid token."));
   }
 };
+export default authenticate;
 
 // end code
-
-export default authenticate;
