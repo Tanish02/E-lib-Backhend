@@ -12,7 +12,7 @@
     "express"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.6",
