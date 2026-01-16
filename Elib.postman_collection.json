@@ -1,0 +1,501 @@
+{
+  "info": {
+    "_postman_id": "142cbbbc-98a8-4750-ae3d-17f89bb8b6b4",
+    "name": "Elib",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43752778",
+    "_collection_link": "https://go.postman.co/collection/43752778-142cbbbc-98a8-4750-ae3d-17f89bb8b6b4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var template = `\r",
+                  "<style type=\"text/css\">\r",
+                  "    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+                  "    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+                  "    .tftable tr {background-color:#ffffff;}\r",
+                  "    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+                  "    .tftable tr:hover {background-color:#e0ffff;}\r",
+                  "</style>\r",
+                  "\r",
+                  "<table class=\"tftable\" border=\"1\">\r",
+                  "    <tr>\r",
+                  "        <th>Message</th>\r",
+                  "    </tr>\r",
+                  "    <tr>\r",
+                  "        <td>{{response.message}}</td>\r",
+                  "    </tr>\r",
+                  "</table>\r",
+                  "`;\r",
+                  "\r",
+                  "function constructVisualizerPayload() {\r",
+                  "    return { response: pm.response.json() }\r",
+                  "}\r",
+                  "\r",
+                  "pm.visualizer.set(template, constructVisualizerPayload());\r",
+                  "\r",
+                  "pm.test(\"Response status code is 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.equal(201);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response has the required fields\", function () {\r",
+                  "    const responseData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(responseData).to.be.an('object');\r",
+                  "    pm.expect(responseData.accessToken).to.exist;\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Access token is a non-empty string\", function () {\r",
+                  "  const responseData = pm.response.json();\r",
+                  "  \r",
+                  "  pm.expect(responseData.accessToken).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Access token should not be empty\");\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Content-Type is application/json\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response status code is 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.equal(201);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Content-Type header is application/json\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Access token should not be empty\", function () {\r",
+                  "  const responseData = pm.response.json();\r",
+                  "  pm.expect(responseData.accessToken).to.exist.and.to.not.be.empty;\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Presence of specific header in the response\", function () {\r",
+                  "    pm.response.to.have.header(\"Content-Type\");\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Tanish-Test\",\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"secret\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5513/api/users/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \r\n    \"email\": \"tanishsharma080@gmail.com\",\r\n    \"password\": \"secret\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5513/api/users/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5513",
+                  "path": [
+                    "api",
+                    "users",
+                    "register"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "42"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"2a-nMoFx54+czTntmSLXl3mqIsZV4A\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 04 Apr 2025 13:09:58 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"User registered successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"secret\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5513/api/users/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Book",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODE4YzI4YWY2ZmFmNWI0Y2YzMGIxNDgiLCJpYXQiOjE3NDY0NTMxNTYsImV4cCI6MTc0NzA1Nzk1Nn0.YokeT3qqRgTiw_4aXKDzdJ9qhSkxJaUcqdrDFnT2qHA",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "type": "text",
+                  "uuid": "7bc70420-c845-4a8e-9a8a-f140981c35bc",
+                  "value": "Party of one"
+                },
+                {
+                  "key": "genre",
+                  "value": "Non-Friction",
+                  "type": "text",
+                  "uuid": "19196fd4-b285-4bf5-b5db-6f3078e54c20"
+                },
+                {
+                  "key": "coverImage",
+                  "type": "file",
+                  "uuid": "18609a7c-fe47-40eb-9b50-b59505a5e8e7",
+                  "src": "postman-cloud:///1f029b12-4067-4ac0-a2cd-9842891bce7a"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "8b1491d6-78f0-4cc8-830e-e879e0bccf42",
+                  "src": "postman-cloud:///1f029bc6-6a42-47f0-9753-dd5617c9f2cd"
+                },
+                {
+                  "key": "author",
+                  "value": "Meghan Keane",
+                  "type": "text",
+                  "uuid": "cb03140e-faf0-48f4-b51b-c511a082b7e7"
+                },
+                {
+                  "key": "description",
+                  "value": "this is book description",
+                  "type": "text",
+                  "uuid": "80302069-6a8b-4e00-817f-a721e77474a3"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5513/api/books",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                "api",
+                "books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODE4YzI4YWY2ZmFmNWI0Y2YzMGIxNDgiLCJpYXQiOjE3NDY0NTUyOTUsImV4cCI6MTc0NzA2MDA5NX0.b9ryOCMEKb09Eja8ZztMJ6ShL5OIhiX1-OV-cKl4LWU",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "type": "text",
+                  "uuid": "7bc70420-c845-4a8e-9a8a-f140981c35bc",
+                  "value": "Party of One."
+                },
+                {
+                  "key": "genre",
+                  "value": "Non-Friction",
+                  "type": "text",
+                  "uuid": "19196fd4-b285-4bf5-b5db-6f3078e54c20"
+                },
+                {
+                  "key": "coverImage",
+                  "type": "file",
+                  "uuid": "18609a7c-fe47-40eb-9b50-b59505a5e8e7",
+                  "src": "postman-cloud:///1f029bdf-12c5-4ea0-95ba-13158e82590d"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "8b1491d6-78f0-4cc8-830e-e879e0bccf42",
+                  "src": "postman-cloud:///1f029bde-d179-49b0-9a99-b4fe1e88d005"
+                },
+                {
+                  "key": "description",
+                  "value": "A detailed explanation of what this book covers. For example, this book explains habit formation in daily life...",
+                  "type": "text",
+                  "uuid": "a6dbd9f3-65cc-452c-8507-c94191ee02d3"
+                },
+                {
+                  "key": "Author",
+                  "value": "Meghan Keane",
+                  "type": "text",
+                  "uuid": "015dbe67-92c0-4b89-adc9-5740b1d33e4a"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5513/api/books/681cc88116b603a6d1683def",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                "api",
+                "books",
+                "681cc88116b603a6d1683def"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 401\", function () {\r",
+                  "    pm.expect(pm.response.code).to.equal(401);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 200ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response has the required Content-Type header\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/html\");\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response body is not empty\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response body should be an empty string\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.equal(\"\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "protocolVersion": "auto"
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5513/api/books",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                "api",
+                "books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5513/api/books/681cda93cf063d26b1b72d37",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                "api",
+                "books",
+                "681cda93cf063d26b1b72d37"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODE4YzI4YWY2ZmFmNWI0Y2YzMGIxNDgiLCJpYXQiOjE3NDY0NTUyOTUsImV4cCI6MTc0NzA2MDA5NX0.b9ryOCMEKb09Eja8ZztMJ6ShL5OIhiX1-OV-cKl4LWU",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5513/api/books/......BOOK_ID",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                "api",
+                "books",
+                "......BOOK_ID"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Home",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5513/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5513",
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
