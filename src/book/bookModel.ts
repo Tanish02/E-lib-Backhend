@@ -7,7 +7,7 @@ const bookSchema = new mongoose.Schema<Book>(
       type: String,
       required: true,
       unique: true,
-      index: true
+      index: true,
     },
     description: {
       type: String,
@@ -37,9 +37,9 @@ const bookSchema = new mongoose.Schema<Book>(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-// end code
-
 export default mongoose.model<Book>("Book", bookSchema);
+
+// end code
