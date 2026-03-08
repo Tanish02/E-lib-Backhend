@@ -1,0 +1,5 @@
+- set up mongo atlas for cloud DB slow & free.
+- removing errors fix
+- working
+- Backend on render
+- link : https://e-lib-backhend.onrender.com/
