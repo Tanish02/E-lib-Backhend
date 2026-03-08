@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import cloudinary from "../Config/Cloudinary";
-import path from "node:path";
-import fs from "node:fs";
 import createHttpError from "http-errors";
-import bookModel from "./bookModel";
-import { AuthRequest } from "../middlewares/authenticate";
 import mongoose from "mongoose";
+import fs from "node:fs";
+import path from "node:path";
+import cloudinary from "../Config/Cloudinary";
+import { AuthRequest } from "../middlewares/authenticate";
+import bookModel from "./bookModel";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
   const { title, genre, description, author } = req.body;
@@ -28,8 +28,8 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
       return next(
         createHttpError(
           400,
-          `Missing required fields: ${missingFields.join(", ")}`
-        )
+          `Missing required fields: ${missingFields.join(", ")}`,
+        ),
       );
     }
 
@@ -42,7 +42,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     const filePath = path.resolve(
       __dirname,
       "../../public/data/uploads",
-      fileName
+      fileName,
     );
 
     const uploadResult = await cloudinary.uploader.upload(filePath, {
@@ -55,7 +55,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     const bookFilePath = path.resolve(
       __dirname,
       "../../public/data/uploads",
-      bookFileName
+      bookFileName,
     );
 
     const bookFileUploadResult = await cloudinary.uploader.upload(
@@ -65,7 +65,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
         filename_override: bookFileName,
         folder: "books-pdfs",
         format: "pdf",
-      }
+      },
     );
 
     // console.log("bookFileUploadResult", bookFileUploadResult);
@@ -105,8 +105,8 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
       return next(
         createHttpError(
           400,
-          `Validation failed: ${validationErrors.join(", ")}`
-        )
+          `Validation failed: ${validationErrors.join(", ")}`,
+        ),
       );
     }
 
@@ -141,7 +141,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
       const filePath = path.resolve(
         __dirname,
         "../../public/data/uploads",
-        filename
+        filename,
       );
       completeCoverImage = filename;
 
@@ -162,7 +162,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
       const bookFilePath = path.resolve(
         __dirname,
         "../../public/data/uploads",
-        files.file[0].filename
+        files.file[0].filename,
       );
 
       const bookFileName = files.file[0].filename;
@@ -187,7 +187,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
         coverImage: completeCoverImage ? completeCoverImage : book.coverImage,
         file: completeFileName ? completeFileName : book.file,
       },
-      { new: true }
+      { new: true },
     );
 
     // console.log("updatedBook", updatedBook);
@@ -212,7 +212,7 @@ const listBooks = async (req: Request, res: Response, next: NextFunction) => {
 const getSingleBook = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const bookId = req.params.bookId;
 
@@ -235,7 +235,7 @@ const getSingleBook = async (
 const deleteBook = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const bookId = req.params.bookId;
 
@@ -262,11 +262,11 @@ const deleteBook = async (
   await cloudinary.uploader.destroy(coverImagePublicId);
   await cloudinary.uploader.destroy(bookFilePublicId, { resource_type: "raw" });
   await bookModel.deleteOne({ _id: bookId });
-  // console.log("Book deleted successfully");
+  console.log("Book deleted successfully");
   res.json({ message: "Book deleted successfully" });
   // res.sendStatus(204);
 };
 
 // end code
 
-export { createBook, updateBook, listBooks, getSingleBook, deleteBook };
+export { createBook, deleteBook, getSingleBook, listBooks, updateBook };
