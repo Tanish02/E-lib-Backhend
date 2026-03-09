@@ -1,16 +1,21 @@
+import cors from "cors";
 import express from "express";
+import bookRouter from "./book/bookRouter";
 import globleErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/userRouter";
-import bookRouter from "./book/bookRouter";
-import cors from "cors";
-import { config } from "./Config/config";
 
 const app = express();
 
 app.use(
   cors({
-    origin: config.frontendDomain,
-  })
+    origin: [
+      "http://localhost:5173",
+      "https://e-lib-dashboard-rose.vercel.app",
+      "https://e-lib-frontend-rose.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
 );
 app.use(express.json());
 
