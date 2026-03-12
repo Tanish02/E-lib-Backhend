@@ -49,4 +49,10 @@ async function testBookUpload() {
   }
 }
 
+// end code
+
 testBookUpload();
+
+// testing if endpoint manually without postman
+// debug purpose only + simulate client request
+// check upload endpoint
